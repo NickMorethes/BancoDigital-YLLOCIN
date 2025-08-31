@@ -116,19 +116,24 @@ src/
 ### Compilação e Execução
 
 bash
+
 # Clone o repositório
+
 git clone https://github.com/NickMorethes/bancodigitalyllocin.git
 
 # Entre no diretório
+
 cd yllocin-bank
 
 # Compile o projeto
+
 javac -d out src/**/*.java
 
 # Execute a aplicação
+
 java -cp out Main
 
-### Usando IDE
+## Usando IDE
 Importe o projeto na sua IDE
 Execute o arquivo Main.java
 Interaja com o menu no terminal
@@ -136,8 +141,11 @@ Interaja com o menu no terminal
 
 👨‍💻 Autor
 Nicolly Roberta Morethes
+
 📧 Email: nrmorethes@outlook.com
+
 💼 LinkedIn: Nicolly Morethes
+
 🐙 GitHub: NickMorethes
 
 
