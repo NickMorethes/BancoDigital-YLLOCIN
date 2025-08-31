@@ -34,6 +34,7 @@ YLLOCIN Bank System
 ├── 💳 Conta (classe abstrata)
 
 │   ├── ContaCorrente (taxa de saque)
+
 │   └── ContaPoupanca (rendimento mensal)
 
 ├── 🏦 Banco (gerenciamento geral)
@@ -74,21 +75,37 @@ YLLOCIN Bank System
 - Contas mais movimentadas
 
 ## 📁 Estrutura do Projeto
+
 src/
+
 ├── banco/
+
 │   ├── Banco.java                 # Gerenciamento principal
+
 │   ├── Cliente.java               # Dados dos clientes
+
 │   ├── Conta.java                 # Classe abstrata base
+
 │   ├── ContaCorrente.java         # Conta com taxas
+
 │   ├── ContaPoupanca.java         # Conta com rendimento
+
 │   ├── Transacao.java             # Registro de operações
+
 │   └── TipoTransacao.java         # Enum de tipos
+
 ├── interfaces/
+
 │   └── IConta.java                # Contrato das contas
+
 ├── exceptions/
+
 │   ├── SaldoInsuficienteException.java
+
 │   └── ContaInexistenteException.java
+
 └── Main.java                      # Interface do usuário
+
 
 ## 🛠️ Como Executar
 
@@ -111,13 +128,12 @@ javac -d out src/**/*.java
 # Execute a aplicação
 java -cp out Main
 
-Usando IDE
+### Usando IDE
 Importe o projeto na sua IDE
 Execute o arquivo Main.java
 Interaja com o menu no terminal
 
-📄 Licença
-Este projeto foi desenvolvido para fins educacionais e demonstração de conceitos POO em Java.
+
 👨‍💻 Autor
 Nicolly Roberta Morethes
 📧 Email: nrmorethes@outlook.com
