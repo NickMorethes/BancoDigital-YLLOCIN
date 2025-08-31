@@ -1,104 +1,122 @@
-# 🏦 Banco Digital - Projeto POO em Java
+# 🏦 YLLOCIN Bank - Sistema Bancário Digital
+
+[![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://www.oracle.com/java/)
+[![POO](https://img.shields.io/badge/Paradigma-Orientado%20a%20Objetos-blue.svg)]()
+[![Status](https://img.shields.io/badge/Status-Concluído-green.svg)]()
 
 ## 📋 Descrição do Projeto
 
-Este projeto implementa um sistema bancário digital utilizando os conceitos fundamentais da Programação Orientada a Objetos (POO) em Java. O objetivo é demonstrar na prática os pilares da POO: **Encapsulamento**, **Herança**, **Polimorfismo** e **Abstração**.
+O **YLLOCIN Bank** é um sistema bancário digital completo desenvolvido em Java, que implementa todos os conceitos fundamentais da Programação Orientada a Objetos (POO). O sistema oferece funcionalidades bancárias essenciais com uma interface intuitiva via terminal.
 
 ## 🎯 Objetivos de Aprendizado
 
-- **Programação Orientada a Objetos**: Classes, objetos, métodos e atributos
-- **Herança**: Reutilização de código e especialização de classes
-- **Polimorfismo**: Comportamentos diferentes para objetos de classes relacionadas
-- **Encapsulamento**: Proteção e controle de acesso aos dados
-- **Abstração**: Simplificação de conceitos complexos
-- **Collections**: ArrayList, HashMap para gerenciar dados
-- **Stream API**: Processamento funcional de coleções
-- **Lambda Expressions**: Programação funcional
-- **Interfaces**: Contratos e múltipla herança de comportamento
+### Conceitos POO Aplicados
+- ✅ **Encapsulamento**: Proteção e controle de acesso aos dados
+- ✅ **Herança**: Classes `ContaCorrente` e `ContaPoupanca` herdam de `Conta`
+- ✅ **Polimorfismo**: Comportamentos específicos para cada tipo de conta
+- ✅ **Abstração**: Interface `IConta` e classe abstrata `Conta`
 
-## 🏗️ Arquitetura do Sistema
+### Tecnologias Java Avançadas
+- ✅ **Collections Framework**: `ArrayList` para gerenciar dados
+- ✅ **Stream API**: Processamento funcional nos relatórios
+- ✅ **Lambda Expressions**: Filtros e ordenações
+- ✅ **Enum**: `TipoTransacao` para categorizar operações
+- ✅ **Exception Handling**: Tratamento personalizado de erros
+- ✅ **LocalDateTime**: Controle de datas nas transações
+- ✅ **BigDecimal**: Precisão monetária
 
-### Entidades Principais
-- **Cliente**: Representa os usuários do banco
-- **Conta**: Classe abstrata base para todos os tipos de conta
-- **ContaCorrente**: Conta com funcionalidades específicas
-- **ContaPoupanca**: Conta poupança com rendimento
-- **Banco**: Gerencia clientes e contas
-- **Transacao**: Registro de operações bancárias
+### 🏗️ Arquitetura do Sistema
 
-### Funcionalidades Implementadas
-- ✅ Criação de clientes e contas
-- ✅ Depósitos e saques
-- ✅ Transferências entre contas
-- ✅ Consulta de saldo e extrato
-- ✅ Histórico de transações
-- ✅ Relatórios com Stream API
+YLLOCIN Bank System
+├── 👤 Cliente (dados pessoais)
+├── 💳 Conta (classe abstrata)
+│   ├── ContaCorrente (taxa de saque)
+│   └── ContaPoupanca (rendimento mensal)
+├── 🏦 Banco (gerenciamento geral)
+├── 📊 Transacao (registro de operações)
+└── ⚠️ Exceptions (tratamento de erros)
 
-## 🛠️ Tecnologias Utilizadas
+## 🚀 Funcionalidades
 
-- **Java 21**: Linguagem principal
-- **Collections Framework**: Gerenciamento de dados
-- **Stream API**: Processamento de dados
-- **Lambda Expressions**: Programação funcional
-- **LocalDateTime**: Manipulação de datas
+### 👤 Gestão de Clientes
+- Cadastro com validação de idade
+- Consulta de dados pessoais
+- Elegibilidade para tipos de conta
+
+### 💳 Operações Bancárias
+- **Depósitos**: Sem taxas
+- **Saques**: Taxa R$ 0,50 para Conta Corrente
+- **Transferências**: Entre qualquer conta
+- **Extratos**: Histórico detalhado
+
+### 📊 Conta Poupança Especial
+- Rendimento mensal de 0,5%
+- Simulação de investimentos
+- Metas de poupança
+- Relatórios de rendimento
+
+### 💼 Conta Corrente Premium
+- Solicitação de cartão de crédito
+- Análise de limite automática
+- Relatórios anuais detalhados
+- Serviços exclusivos
+
+### 📈 Relatórios Gerenciais
+- Estatísticas completas do banco
+- Top clientes por patrimônio
+- Análise por faixa etária
+- Contas mais movimentadas
 
 ## 📁 Estrutura do Projeto
-
 src/
 ├── banco/
-│   ├── Banco.java
-│   ├── Cliente.java
-│   ├── Conta.java
-│   ├── ContaCorrente.java
-│   ├── ContaPoupanca.java
-│   ├── Transacao.java
-│   └── TipoTransacao.java
+│   ├── Banco.java                 # Gerenciamento principal
+│   ├── Cliente.java               # Dados dos clientes
+│   ├── Conta.java                 # Classe abstrata base
+│   ├── ContaCorrente.java         # Conta com taxas
+│   ├── ContaPoupanca.java         # Conta com rendimento
+│   ├── Transacao.java             # Registro de operações
+│   └── TipoTransacao.java         # Enum de tipos
 ├── interfaces/
-│   └── IConta.java
+│   └── IConta.java                # Contrato das contas
 ├── exceptions/
 │   ├── SaldoInsuficienteException.java
 │   └── ContaInexistenteException.java
-└── Main.java
+└── Main.java                      # Interface do usuário
+
+## 🛠️ Como Executar
+
+### Pré-requisitos
+- Java 21 ou superior
+- IDE (IntelliJ IDEA, Eclipse, VS Code)
+
+### Compilação e Execução
+
+bash
+# Clone o repositório
+git clone https://github.com/NickMorethes/bancodigitalyllocin.git
+
+# Entre no diretório
+cd yllocin-bank
+
+# Compile o projeto
+javac -d out src/**/*.java
+
+# Execute a aplicação
+java -cp out Main
+
+Usando IDE
+Importe o projeto na sua IDE
+Execute o arquivo Main.java
+Interaja com o menu no terminal
+
+📄 Licença
+Este projeto foi desenvolvido para fins educacionais e demonstração de conceitos POO em Java.
+👨‍💻 Autor
+Nicolly Roberta Morethes
+📧 Email: nrmorethes@outlook.com
+💼 LinkedIn: Nicolly Morethes
+🐙 GitHub: NickMorethes
 
 
-``` 
-## 🚀 Como Executar
-
-1. Clone o repositório:
-```
-bash git clone [https://github.com/seu-usuario/banco-digital.git](https://github.com/seu-usuario/banco-digital.git)
-``` 
-
-2. Compile o projeto:
-```
-bash javac -d out src/**/*.java
-``` 
-
-3. Execute a aplicação:
-```
-bash java -cp out Main
-``` 
-
-## 💡 Conceitos POO Demonstrados
-
-### 1. **Encapsulamento**
-```
-java private double saldo; public double getSaldo() { return saldo; }
-``` 
-
-### 2. **Herança**
-```java
-public class ContaCorrente extends Conta { }
-public class ContaPoupanca extends Conta { }
-```
-
-### 3. **Polimorfismo**
-```java
-List<Conta> contas = Arrays.asList(
-    new ContaCorrente(),
-    new ContaPoupanca()
-);
-```
-
-### 4. **Abstração**
-```
+⭐ Se este projeto foi útil para você, considere dar uma estrela!

@@ -2,6 +2,7 @@ package banco;
 
 import java.math.BigDecimal;
 
+
 /**
  * Conta Corrente - especialização da classe Conta para o YLLOCIN Bank
  * -----------------------------------------------
@@ -92,7 +93,7 @@ public class ContaCorrente extends Conta {
         System.out.println("══════════════════════════════════════");
     }
     
-    public double getTaxaSaque() {
+    public double getTAXA_SAQUE() {
         return TAXA_SAQUE;
     }
     

@@ -3,6 +3,7 @@ package banco;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+
 /**
  * Conta Poupança - especialização da classe Conta para o YLLOCIN Bank
  * -----------------------------------------------
@@ -118,10 +119,10 @@ public class ContaPoupanca extends Conta {
         System.out.printf("💰 Saldo atual: R$ %.2f%n", this.saldo.doubleValue());
         System.out.printf("📅 Último rendimento: %s%n", this.dataUltimoRendimento);
         
-        // ✅ CORREÇÃO 2: Lambda substituída por method reference
+
         BigDecimal totalRendimentos = this.historico.stream()
             .filter(t -> t.getTipo() == TipoTransacao.RENDIMENTO)
-            .map(Transacao::getValor)  // ✅ Method reference
+            .map(Transacao::getValor)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
         
         long quantidadeRendimentos = this.historico.stream()
@@ -136,12 +137,12 @@ public class ContaPoupanca extends Conta {
         System.out.println("════════════════════════════════════════════");
     }
     
-    // ✅ CORREÇÃO 3: Método usado no relatório de administração
+
     public double getTaxaRendimento() {
         return RENDIMENTO_MENSAL;
     }
     
-    // ✅ CORREÇÃO 4: Método usado para auditoria
+
     public LocalDate getDataUltimoRendimento() {
         return dataUltimoRendimento;
     }

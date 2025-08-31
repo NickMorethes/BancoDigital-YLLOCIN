@@ -2,7 +2,6 @@ package exceptions;
 
 /**
  * Exception para quando uma conta não é encontrada no sistema
- * 
  * Utilizada principalmente em operações de busca por número da conta
  */
 public class ContaInexistenteException extends RuntimeException {

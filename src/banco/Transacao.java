@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * Classe que representa uma transação bancária no YLLOCIN Bank
- * 
+ * -----------------------------------------------------
  * Objeto imutável que registra todas as informações de uma operação
  */
 public class Transacao {
@@ -42,15 +42,15 @@ public class Transacao {
         return valor;
     }
     
-    public LocalDateTime getDataHora() {
+    public LocalDateTime getdataHora() {
         return dataHora;
     }
     
-    public String getDescricao() {
+    public String getdescricao() {
         return descricao;
     }
     
-    public String getContaOrigem() {
+    public String getcontaOrigem() {
         return contaOrigem;
     }
     

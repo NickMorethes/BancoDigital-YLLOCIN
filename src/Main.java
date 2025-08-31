@@ -141,7 +141,7 @@ public class Main {
             String nome = lerDadoObrigatorio("Nome completo: ");
             String cpf = lerDadoObrigatorio("CPF: ");
             LocalDate dataNascimento = lerDataNascimento();
-            String telefone = lerDadoOpcional("Telefone (opcional): ");
+            String telefone = lerDadoOpcional();
             
             Cliente cliente = new Cliente(nome, cpf, dataNascimento, telefone);
             
@@ -272,26 +272,27 @@ public class Main {
     
     private static void realizarTransferencia() {
         exibirTitulo("REALIZAR TRANSFERÊNCIA");
-        
+
         try {
             System.out.println("=== CONTA DE ORIGEM ===");
-            IConta contaOrigemObj = selecionarConta("Transferir DE qual conta?");
+            IConta contaOrigemObj = selecionarConta("Transferir de qual conta?");
             if (contaOrigemObj == null) return;
-            
+
             System.out.printf("💰 Saldo disponível: R$ %.2f%n", contaOrigemObj.getSaldo().doubleValue());
-            
+
             int numeroDestino = lerInteiro("Número da conta DESTINO: ");
+            IConta contaDestino = banco.buscarContaPorNumero(numeroDestino);
             double valor = lerValorPositivo("Valor da transferência: R$ ");
-            
-            contaOrigemObj.transferir(BigDecimal.valueOf(valor), numeroDestino);
-            
+
+            contaOrigemObj.transferir(BigDecimal.valueOf(valor), contaDestino);
+
             exibirSucesso("Transferência realizada com sucesso!");
             System.out.printf("💰 Novo saldo: R$ %.2f%n", contaOrigemObj.getSaldo().doubleValue());
-            
+
         } catch (Exception e) {
             exibirErro("Erro na transferência: " + e.getMessage());
         }
-        
+
         pausar();
     }
     
@@ -613,8 +614,7 @@ public class Main {
         switch (opcao) {
             case 1 -> simulacaoRendimento();
             case 2 -> relatorioAnualContaCorrente();
-            case 3 -> definirMetaPoupanca();
-            case 4 -> buscaAvancada();
+            case 3 -> buscaAvancada();
             case 0 -> System.out.println("Voltando ao menu principal...");
             default -> exibirErro("Opção inválida!");
         }
@@ -645,8 +645,7 @@ public class Main {
             IConta conta = selecionarConta("Qual conta poupança deseja simular?");
             if (conta == null) return;
             
-            if (conta instanceof ContaPoupanca) {
-                ContaPoupanca poupanca = (ContaPoupanca) conta;
+            if (conta instanceof ContaPoupanca poupanca) {
                 poupanca.consultarRendimento();
             } else {
                 exibirErro("Conta selecionada não é uma poupança!");
@@ -678,8 +677,7 @@ public class Main {
             IConta conta = selecionarConta("Qual conta corrente deseja o relatório?");
             if (conta == null) return;
             
-            if (conta instanceof ContaCorrente) {
-                ContaCorrente corrente = (ContaCorrente) conta;
+            if (conta instanceof ContaCorrente corrente) {
                 corrente.gerarRelatorioAnual();
             } else {
                 exibirErro("Conta selecionada não é uma conta corrente!");
@@ -690,42 +688,7 @@ public class Main {
         }
     }
     
-    private static void definirMetaPoupanca() {
-        exibirTitulo("DEFINIR META DE POUPANÇA");
-        
-        try {
-            // Buscar contas poupança
-            boolean temPoupanca = false;
-            for (IConta conta : banco.getContas()) {
-                if (conta instanceof ContaPoupanca) {
-                    temPoupanca = true;
-                    break;
-                }
-            }
-            
-            if (!temPoupanca) {
-                exibirAviso("Nenhuma conta poupança encontrada.");
-                return;
-            }
-            
-            IConta conta = selecionarConta("Para qual poupança deseja definir meta?");
-            if (conta == null) return;
-            
-            if (conta instanceof ContaPoupanca) {
-                ContaPoupanca poupanca = (ContaPoupanca) conta;
-                
-                double valorMeta = lerValorPositivo("Valor da meta: R$ ");
-                int meses = lerInteiro("Prazo em meses: ");
-                
-                poupanca.definirMetaPoupanca(valorMeta, meses);
-            } else {
-                exibirErro("Conta selecionada não é uma poupança!");
-            }
-            
-        } catch (Exception e) {
-            exibirErro("Erro ao definir meta: " + e.getMessage());
-        }
-    }
+
     
     private static void buscaAvancada() {
         exibirTitulo("BUSCA AVANÇADA");
@@ -863,8 +826,8 @@ public class Main {
         return input;
     }
     
-    private static String lerDadoOpcional(String prompt) {
-        System.out.print(prompt);
+    private static String lerDadoOpcional() {
+        System.out.print("Telefone (opcional): ");
         return scanner.nextLine().trim();
     }
     
@@ -970,5 +933,4 @@ public class Main {
         
         scanner.close();
     }
-}
 }

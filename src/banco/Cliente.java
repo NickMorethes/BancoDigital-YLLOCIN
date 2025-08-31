@@ -3,6 +3,7 @@ package banco;
 import java.time.LocalDate;
 import java.time.Period;
 
+
 /**
  * Classe Cliente - representa um cliente do banco
  * -----------------------------------------------------
@@ -19,32 +20,52 @@ public class Cliente {
     private String telefone;
     private boolean emancipado;
     private Cliente responsavelLegal;
-    
-    // Construtor principal
-    public Cliente(String nome, String cpf, LocalDate dataNascimento) {
+
+    // Construtor principal - para clientes maiores de idade
+    public Cliente(String nome, String cpf, LocalDate dataNascimento, String telefone) {
         setNome(nome);
         setCpf(cpf);
         setDataNascimento(dataNascimento);
-        this.emancipado = false;
-        this.responsavelLegal = null;
+        setTelefone(telefone);
+        // Para maiores de idade, não precisa de responsável legal
+        if (getIdade() >= 18) {
+            setResponsavelLegal(null);
+            setEmancipado(false);
+        }
     }
-    
-    // Construtor para menores com responsável
-    public Cliente(String nome, String cpf, LocalDate dataNascimento, Cliente responsavelLegal) {
-        this(nome, cpf, dataNascimento);
-        setResponsavelLegal(responsavelLegal);
+
+    // Construtor para menores de idade - requer responsável legal
+    public Cliente(String nome, String cpf, LocalDate dataNascimento, String telefone, Cliente responsavelLegal) {
+        this.nome = validarNome(nome);
+        this.cpf = validarCPF(cpf);
+        this.dataNascimento = dataNascimento;
+        this.telefone = telefone != null ? telefone : "";
+        //this.dataAbertura = LocalDate.now();
+
+        // Validações específicas para menores
+        if (getIdade() < 18) {
+            if (responsavelLegal == null) {
+                throw new IllegalArgumentException("Menor de idade deve ter um responsável legal");
+            }
+            if (responsavelLegal.getIdade() < 18) {
+                throw new IllegalArgumentException("Responsável legal deve ser maior de idade");
+            }
+            setResponsavelLegal(responsavelLegal);
+        } else {// Para maiores de idade, não precisa de responsável legal
+            setResponsavelLegal(null);
+            setEmancipado(false);
+        }
     }
-    
-    // Construtor simplificado (compatibilidade)
-    public Cliente(String nome, String cpf) {
-        this(nome, cpf, LocalDate.of(1990, 1, 1));
+
+    // Construtor simplificado - sem telefone
+    public Cliente(String nome, String cpf, LocalDate dataNascimento) {
+        this(nome, cpf, dataNascimento, "");
     }
-    
-    // GETTERS E SETTERS BÁSICOS
+
     public String getNome() {
         return nome;
     }
-    
+
     public void setNome(String nome) {
         if (nome == null || nome.trim().isEmpty()) {
             throw new IllegalArgumentException("Nome não pode ser vazio");
@@ -54,73 +75,74 @@ public class Cliente {
         }
         this.nome = nome.trim();
     }
-    
+
     public String getCpf() {
         return cpf;
     }
-    
+
     public void setCpf(String cpf) {
         if (cpf == null || cpf.trim().isEmpty()) {
             throw new IllegalArgumentException("CPF não pode ser vazio");
         }
-        
+
         String cpfLimpo = cpf.replaceAll("[^0-9]", "");
         if (cpfLimpo.length() != 11) {
             throw new IllegalArgumentException("CPF deve ter 11 dígitos");
         }
-        
+
         this.cpf = formatarCpf(cpfLimpo);
     }
-    
+
     public LocalDate getDataNascimento() {
         return dataNascimento;
     }
-    
+
     public void setDataNascimento(LocalDate dataNascimento) {
         if (dataNascimento == null) {
             throw new IllegalArgumentException("Data de nascimento não pode ser nula");
         }
-        
+
         if (dataNascimento.isAfter(LocalDate.now())) {
             throw new IllegalArgumentException("Data de nascimento não pode ser futura");
         }
-        
-        // ✅ REMOVIDO: Não há idade mínima para ser cliente
-        // Qualquer idade pode ser cliente (bebês, crianças, etc.)
-        
+
         this.dataNascimento = dataNascimento;
     }
-    
-    // ✅ NOVOS GETTERS/SETTERS
+
+
     public boolean isEmancipado() {
         return emancipado;
     }
-    
+
     public void setEmancipado(boolean emancipado) {
         if (emancipado && getIdade() >= 18) {
             throw new IllegalArgumentException("Maior de idade não precisa ser emancipado");
         }
         this.emancipado = emancipado;
     }
-    
-    public Cliente getResponsavelLegal() {
+
+    Cliente getResponsavelLegal() {
         return responsavelLegal;
     }
-    
-    public void setResponsavelLegal(Cliente responsavelLegal) {
-        if (getIdade() >= 18) {
+
+    void setResponsavelLegal(Cliente responsavelLegal) {
+        // CORREÇÃO: Permitir null para maiores de idade
+        if (getIdade() >= 18 && responsavelLegal != null) {
             throw new IllegalArgumentException("Maior de idade não precisa de responsável legal");
         }
-        
+
         if (responsavelLegal != null && responsavelLegal.getIdade() < 18) {
             throw new IllegalArgumentException("Responsável legal deve ser maior de idade");
         }
-        
+
         this.responsavelLegal = responsavelLegal;
     }
-    
+
     // Getters para email e telefone (mesma implementação anterior)
-    public String getEmail() { return email; }
+    public String getEmail() {
+        return email;
+    }
+
     public void setEmail(String email) {
         if (email != null && !email.trim().isEmpty()) {
             if (!email.contains("@") || !email.contains(".")) {
@@ -131,11 +153,15 @@ public class Cliente {
             this.email = null;
         }
     }
-    
-    public String getTelefone() { return telefone; }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
     public void setTelefone(String telefone) {
         if (telefone != null && !telefone.trim().isEmpty()) {
             String telefoneLimpo = telefone.replaceAll("[^0-9]", "");
+
             if (telefoneLimpo.length() < 10 || telefoneLimpo.length() > 11) {
                 throw new IllegalArgumentException("Telefone deve ter 10 ou 11 dígitos");
             }
@@ -144,24 +170,24 @@ public class Cliente {
             this.telefone = null;
         }
     }
-    
+
     // MÉTODO CALCULADO
     public int getIdade() {
         return Period.between(this.dataNascimento, LocalDate.now()).getYears();
     }
 
-    
+
     /**
-     * ✅ CONTA POUPANÇA: Qualquer idade é permitida
+     * CONTA POUPANÇA: Qualquer idade é permitida
      * - Bebês, crianças, adultos - todos podem ter
      * - Pais podem abrir para filhos como reserva/educação financeira
      */
     public boolean podeAbrirContaPoupanca() {
         return true;
     }
-    
+
     /**
-     * ✅ CONTA CORRENTE: 18+ ou emancipado
+     * CONTA CORRENTE: 18+ ou emancipado
      * - Maior de 18 anos: automático
      * - Menor emancipado: com documentação legal
      * - Menor com responsável: NÃO (seria conta conjunta, caso mais complexo)
@@ -169,34 +195,84 @@ public class Cliente {
     public boolean podeAbrirContaCorrente() {
         return getIdade() >= 18 || isEmancipado();
     }
-    
-    // MÉTODOS UTILITÁRIOS
-    private String formatarCpf(String cpf) {
-        return String.format("%s.%s.%s-%s", 
-            cpf.substring(0, 3),
-            cpf.substring(3, 6), 
-            cpf.substring(6, 9),
-            cpf.substring(9, 11));
+
+    // MÉTODOS UTILITÁRIOS]
+
+    /**
+     * Valida o formato do CPF (apenas formato, não verifica dígitos verificadores)
+     *
+     * @param cpf CPF a ser validado
+     * @return CPF formatado se válido
+     * @throws IllegalArgumentException se CPF for inválido
+     */
+    private static String validarCPF(String cpf) {
+        if (cpf == null || cpf.trim().isEmpty()) {
+            throw new IllegalArgumentException("CPF não pode ser vazio");
+        }
+
+        // Remove caracteres não numéricos
+        String cpfLimpo = cpf.replaceAll("[^0-9]", "");
+
+        // Verifica se tem 11 dígitos
+        if (cpfLimpo.length() != 11) {
+            throw new IllegalArgumentException("CPF deve ter 11 dígitos");
+        }
+
+        // Verifica se não são todos os dígitos iguais (ex: 111.111.111-11)
+        if (cpfLimpo.matches("(\\d)\\1{10}")) {
+            throw new IllegalArgumentException("CPF inválido: todos os dígitos são iguais");
+        }
+
+        return validarCPF(cpfLimpo);
     }
-    
+
+
+    private String validarNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome não pode ser vazio");
+        }
+
+        String nomeFormatado = nome.trim();
+
+        // Verificar se tem pelo menos 2 caracteres
+        if (nomeFormatado.length() < 2) {
+            throw new IllegalArgumentException("Nome deve ter pelo menos 2 caracteres");
+        }
+
+        // Verificar se contém apenas letras e espaços
+        if (!nomeFormatado.matches("[a-zA-ZÀ-ÿ\\s]+")) {
+            throw new IllegalArgumentException("Nome deve conter apenas letras e espaços");
+        }
+
+        return nomeFormatado;
+    }
+
+    private String formatarCpf(String cpf) {
+        return String.format("%s.%s.%s-%s",
+                cpf.substring(0, 3),
+                cpf.substring(3, 6),
+                cpf.substring(6, 9),
+                cpf.substring(9, 11));
+    }
+
     private String formatarTelefone(String telefone) {
         if (telefone.length() == 10) {
             return String.format("(%s) %s-%s",
-                telefone.substring(0, 2),
-                telefone.substring(2, 6),
-                telefone.substring(6, 10));
+                    telefone.substring(0, 2),
+                    telefone.substring(2, 6),
+                    telefone.substring(6, 10));
         } else { // 11 dígitos
             return String.format("(%s) %s-%s",
-                telefone.substring(0, 2),
-                telefone.substring(2, 7),
-                telefone.substring(7, 11));
+                    telefone.substring(0, 2),
+                    telefone.substring(2, 7),
+                    telefone.substring(7, 11));
         }
     }
-    
+
     @Override
     public String toString() {
-        return String.format("Cliente{nome='%s', cpf='%s', idade=%d}", 
-            nome, cpf, getIdade());
+        return String.format("Cliente{nome='%s', cpf='%s', idade=%d, telefone='%s'}",
+                nome, cpf, getIdade(), telefone.isEmpty() ? "N/A" : telefone);
     }
 
     // Método para impressão detalhada
@@ -205,7 +281,7 @@ public class Cliente {
         System.out.println("Nome: " + nome);
         System.out.println("CPF: " + cpf);
         System.out.println("Idade: " + getIdade() + " anos");
-        System.out.println("Data Nascimento: " + getDataNascimento()); // ✅ USANDO GETTER
+        System.out.println("Data Nascimento: " + getDataNascimento());
 
         if (getEmail() != null) {
             System.out.println("Email: " + getEmail());
@@ -232,19 +308,20 @@ public class Cliente {
         System.out.println("Pode abrir CC: " + (podeAbrirContaCorrente() ? "Sim" : "Não"));
         System.out.println("Pode abrir CP: " + (podeAbrirContaPoupanca() ? "Sim" : "Não"));
         System.out.println("========================");
-    }
 
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Cliente cliente = (Cliente) obj;
-        return cpf.equals(cliente.cpf);
-    }
-    
-    @Override
-    public int hashCode() {
-        return cpf.hashCode();
     }
 }
+
+//       // @Override
+//        public boolean equals (Object obj){
+//            if (this == obj) return true;
+//            if (obj == null || getClass() != obj.getClass()) return false;
+//            Cliente cliente = (Cliente) obj;
+//            return cpf.equals(cliente.cpf);
+
+
+        //@Override
+       // public int hashCode () {
+        //    return cpf.hashCode();
+
+

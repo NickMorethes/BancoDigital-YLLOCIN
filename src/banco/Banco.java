@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 /**
  * Classe principal do sistema bancário YLLOCIN
  * Gerencia clientes e contas do banco
@@ -300,10 +301,8 @@ public class Banco {
     }
     
     // ================= GETTERS =================
-    
-    public String getNome() {
-        return nome;
-    }
+
+
     
     public List<Cliente> getClientes() {
         return new ArrayList<>(clientes); // Retorna cópia para segurança
@@ -329,7 +328,7 @@ public class Banco {
     
     @Override
     public String toString() {
-        return String.format("Banco{nome='%s', clientes=%d, contas=%d, patrimonio=%.2f}", 
+        return String.format("Banco{nome='%s', clientes=%d, contas=%d, patrimonio=%.2f}",
             nome, clientes.size(), contas.size(), getPatrimonioTotal().doubleValue());
     }
 }

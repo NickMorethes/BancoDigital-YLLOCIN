@@ -7,17 +7,16 @@ import java.util.List;
 
 /**
  * Interface que define o contrato para operações bancárias no YLLOCIN Bank
- * 
  * Define métodos obrigatórios que todas as contas devem implementar
  */
 public interface IConta {
     
     // Operações bancárias básicas
-    void sacar(double valor);
-    void depositar(double valor);
-    void transferir(double valor, IConta contaDestino);
-    
-    // Informações da conta
+    void sacar(BigDecimal valor);
+    void depositar(BigDecimal valor);
+    void transferir(BigDecimal valor, IConta contaDestino);
+
+   // Getters para atributos essenciais
     int getNumero();
     int getAgencia();
     BigDecimal getSaldo();
@@ -34,11 +33,13 @@ public interface IConta {
     }
     
     // Utilitários estáticos
-    static boolean validarValor(double valor) {
-        return valor > 0;
+    static boolean validarValor(BigDecimal valor) {
+        return valor != null && valor.compareTo(BigDecimal.ZERO) > 0;
     }
     
     static String formatarMoeda(BigDecimal valor) {
         return String.format("R$ %.2f", valor.doubleValue());
     }
+
+
 }

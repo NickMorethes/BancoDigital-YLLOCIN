@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
 
+
 /**
  * Classe abstrata que representa uma conta bancária no YLLOCIN Bank
  *---------------------------------------------------------------------
@@ -34,23 +35,22 @@ public abstract class Conta implements IConta {
 
     // Implementação das operações bancárias
     @Override
-    public void sacar(double valor) {
-        BigDecimal valorSaque = BigDecimal.valueOf(valor);
+    public void sacar(BigDecimal valor) {
 
-        if (valorSaque.compareTo(BigDecimal.ZERO) <= 0) {
+        if (valor.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Valor deve ser positivo");
         }
 
-        if (this.saldo.compareTo(valorSaque) < 0) {
+        if (this.saldo.compareTo(valor) < 0) {
             throw new SaldoInsuficienteException(
                     String.format("Saldo insuficiente. Saldo atual: R$ %.2f" ,
                             this.saldo.doubleValue()));
         }
 
-        this.saldo = this.saldo.subtract(valorSaque);
+        this.saldo = this.saldo.subtract(valor);
 
         // Registra a transação
-        registrarTransacao(new Transacao(TipoTransacao.SAQUE, valorSaque,
+        registrarTransacao(new Transacao(TipoTransacao.SAQUE, valor,
                 "Saque realizado" , String.valueOf(this.numero)));
 
         // Chama método específico de cada tipo de conta
@@ -58,23 +58,23 @@ public abstract class Conta implements IConta {
     }
 
     @Override
-    public void depositar(double valor) {
-        BigDecimal valorDeposito = BigDecimal.valueOf(valor);
+    public void depositar(BigDecimal valor) {
+        BigDecimal valorDeposito = valor;
 
         if (valorDeposito.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Valor deve ser positivo");
         }
 
-        this.saldo = this.saldo.add(valorDeposito);
+        this.saldo = this.saldo.add(valor);
 
         // Registra a transação
-        registrarTransacao(new Transacao(TipoTransacao.DEPOSITO, valorDeposito,
+        registrarTransacao(new Transacao(TipoTransacao.DEPOSITO, valor,
                 "Depósito realizado" , String.valueOf(this.numero)));
     }
 
     @Override
-    public void transferir(double valor, IConta contaDestino) {
-        BigDecimal valorTransferencia = BigDecimal.valueOf(valor);
+    public void transferir(BigDecimal valor, IConta contaDestino) {
+        BigDecimal valorTransferencia = valor;
 
         // Validações
         if (valorTransferencia.compareTo(BigDecimal.ZERO) <= 0) {
@@ -91,6 +91,7 @@ public abstract class Conta implements IConta {
 
         // Verifica saldo suficiente (incluindo possíveis taxas)
         BigDecimal saldoNecessario = valorTransferencia;
+
         if (this instanceof ContaCorrente) {
             saldoNecessario = saldoNecessario.add(BigDecimal.valueOf(0.50)); // Taxa de saque
         }
@@ -107,13 +108,14 @@ public abstract class Conta implements IConta {
 
         // Registra transação específica de transferência no histórico do destinatário
         Conta contaDestinoImpl = (Conta) contaDestino;
-        contaDestinoImpl.registrarTransacao(new Transacao(
+        registrarTransacao(new Transacao(
                 TipoTransacao.TRANSFERENCIA,
-                valorTransferencia,
-                "Transferência recebida de Conta " + this.numero,
-                String.valueOf(contaDestino.getNumero()),
-                String.valueOf(this.numero)));
+                valor,
+                "Transferência para Conta " + contaDestino.getNumero(),
+                String.valueOf(this.numero),
+                String.valueOf(contaDestino.getNumero())));
     }
+
 
     // Método abstrato - cada tipo de conta implementa sua própria taxa
     protected abstract void aplicarTaxaSaque();
