@@ -28,12 +28,18 @@ O **YLLOCIN Bank** é um sistema bancário digital completo desenvolvido em Java
 ### 🏗️ Arquitetura do Sistema
 
 YLLOCIN Bank System
+
 ├── 👤 Cliente (dados pessoais)
+
 ├── 💳 Conta (classe abstrata)
+
 │   ├── ContaCorrente (taxa de saque)
 │   └── ContaPoupanca (rendimento mensal)
+
 ├── 🏦 Banco (gerenciamento geral)
+
 ├── 📊 Transacao (registro de operações)
+
 └── ⚠️ Exceptions (tratamento de erros)
 
 ## 🚀 Funcionalidades
